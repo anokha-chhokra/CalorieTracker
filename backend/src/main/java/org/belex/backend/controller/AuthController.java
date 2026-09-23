@@ -20,6 +20,11 @@ public class AuthController {
     }
 
     @PostMapping("/register")
+    public AuthDtos.AuthResponse register(@Valid @RequestBody AuthDtos.RegisterRequest registerRequest){
+        return authService.register(registerRequest);
+    }
+
+    @PostMapping("/login")
     public AuthDtos.AuthResponse login(@Valid @RequestBody AuthDtos.LoginRequest request){
         return authService.login(request);
     }
