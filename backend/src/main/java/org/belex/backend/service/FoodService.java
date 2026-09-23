@@ -1,6 +1,5 @@
 package org.belex.backend.service;
 
-import org.belex.backend.dto.AuthDtos;
 import org.belex.backend.dto.FoodDtos;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
@@ -34,7 +33,7 @@ public class FoodService {
                 .retrieve()
                 .body(FoodDtos.FoodSearchResponse.class);
 
-        if (response == null || response.foods() == null || response.foods().isEmpty()){
+        if (response == null || response.foods() == null){
             return List.of();
         }
 
@@ -57,7 +56,7 @@ public class FoodService {
     }
 
     private double nutrient(FoodDtos.FoodResult food, int nutrientId){
-        if (food.foodNutrients() == null || food.foodNutrients().isEmpty()){
+        if (food.foodNutrients() == null){
             return 0;
         }
         return food.foodNutrients().stream()
