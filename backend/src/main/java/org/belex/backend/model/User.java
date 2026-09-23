@@ -31,7 +31,7 @@ public class User {
         createdAt = Instant.now();
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
     public String getEmail() {
