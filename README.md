@@ -1,17 +1,17 @@
 # CalorieTracker
 
-CalorieTracker is a full-stack calorie and nutrition tracking app built with a Spring Boot backend and a React + Vite frontend. It allows users to sign up, log food entries, view daily and weekly nutrition summaries, and manage their calorie goals.
+CalorieTracker is a full-stack calorie and nutrition tracking application built with a Spring Boot backend and a React + Vite frontend. It helps users register accounts, set a daily calorie goal, search food nutrition data, log meals, and track their intake over time.
 
 ## Features
 
-- User registration and login with JWT-based authentication
-- Daily calorie goal tracking and profile management
-- Food search powered by USDA nutrition data
+- User registration and login with JWT authentication
+- Daily calorie goal and profile management
+- Food search backed by USDA nutrition data
 - Meal logging with calories, protein, carbs, and fat
-- Daily dashboard with progress rings and macro breakdowns
-- Weekly and monthly trends for calorie intake
-- Food history and deletion support
-- H2 file-backed database for local development
+- Dashboard showing remaining calories and macro totals
+- Weekly and monthly nutrition trend charts
+- History view for recent food entries
+- Local file-based H2 database for easy development setup
 
 ## Tech stack
 
@@ -27,7 +27,7 @@ CalorieTracker is a full-stack calorie and nutrition tracking app built with a S
 - React 19
 - Vite
 - Recharts
-- CSS custom UI
+- CSS-based UI
 
 ## Repository structure
 
@@ -36,7 +36,7 @@ CalorieTracker/
 ├── backend/               # Spring Boot API server
 │   ├── src/
 │   │   ├── main/
-│   │   │   ├── java/       # Controllers, services, models, security, config
+│   │   │   ├── java/       # Application code
 │   │   │   └── resources/
 │   │   └── test/
 │   ├── pom.xml
@@ -49,61 +49,55 @@ CalorieTracker/
 │   ├── vite.config.js
 │   └── index.html
 ├── .gitignore
-└── README.md
+├── README.md
+└── LICENSE (if added later)
 ```
 
-## How it works
+## Setup guide
 
-The project is split into two main apps:
+Follow the steps below to run the app locally.
 
-- The backend exposes REST APIs under `/api` for authentication, food search, entry management, profile updates, and dashboard metrics.
-- The frontend runs as a single-page app and calls the backend for authentication and nutrition data.
-- The backend stores user and food-entry data in an H2 database file located under `backend/data/calorietrack`.
+### Prerequisites
 
-## Prerequisites
+Make sure you have the following installed on your machine:
 
-Before running the app locally, make sure you have:
-
-- Java 21+
-- Maven or the included `mvnw` wrapper
-- Node.js 18+
+- Java 21 or newer
+- Maven (or use the included `mvnw` wrapper)
+- Node.js 18 or newer
 - npm
 
-## Backend setup
+### 1) Clone the repository
 
-From the repository root:
+```bash
+git clone https://github.com/anokha-chhokra/CalorieTracker.git
+cd CalorieTracker
+```
+
+### 2) Start the backend
+
+From the project root:
 
 ```bash
 cd backend
 ./mvnw spring-boot:run
 ```
 
-The backend runs on:
+On Windows, use:
+
+```bash
+cd backend
+mvnw.cmd spring-boot:run
+```
+
+The backend should start on:
 
 ```text
 http://localhost:8080
 ```
 
-### Important configuration
+### 3) Start the frontend
 
-The backend configuration is in:
-
-```text
-backend/src/main/resources/application.properties
-```
-
-Default settings include:
-
-- H2 database: `jdbc:h2:file:./data/calorietrack`
-- JWT secret: `app.jwt-secret`
-- CORS origin: `http://localhost:5173`
-- USDA API key: `usda.api-key`
-
-For local development, the app is preconfigured to work with the default dev values, but you should replace the JWT secret and API key before using it in any non-local environment.
-
-## Frontend setup
-
-From the repository root:
+Open a new terminal and run:
 
 ```bash
 cd frontend
@@ -111,10 +105,57 @@ npm install
 npm run dev
 ```
 
-The frontend typically runs on:
+The frontend should start on:
 
 ```text
 http://localhost:5173
+```
+
+### 4) Open the app
+
+Visit:
+
+```text
+http://localhost:5173
+```
+
+Then create an account or sign in to begin tracking calories.
+
+## Configuration
+
+The backend settings are stored in:
+
+```text
+backend/src/main/resources/application.properties
+```
+
+Important values include:
+
+- `spring.datasource.url` → H2 local database path
+- `app.jwt-secret` → JWT signing secret
+- `app.jwt-expiration-ms` → JWT expiration time
+- `app.cors.allowed-origin` → frontend origin for CORS
+- `usda.api-key` → USDA FoodData Central API key
+
+### Default local configuration
+
+By default, the project is set up for local development with:
+
+```properties
+spring.datasource.url=jdbc:h2:file:./data/calorietrack;DB_CLOSE_DELAY=-1;AUTO_SERVER=TRUE
+app.cors.allowed-origin=http://localhost:5173
+usda.api-key=DEMO_KEY
+```
+
+For production or shared environments, update these values to secure and environment-specific settings.
+
+## Running tests
+
+Backend tests can be run with:
+
+```bash
+cd backend
+./mvnw test
 ```
 
 ## Main API endpoints
@@ -127,44 +168,50 @@ http://localhost:5173
 ### Food search
 - `GET /api/foods/search?query={foodName}`
 
-### Entries
-- `GET /api/entries` (or dashboard-related entry endpoints depending on implementation)
-- `POST /api/entries`
-- `DELETE /api/entries/{id}`
-
-### Dashboard
+### Dashboard and nutrition
 - `GET /api/dashboard`
+
+### Entry management
+- `POST /api/entries`
+- `GET /api/entries`
+- `DELETE /api/entries/{id}`
 
 ### Profile
 - `PUT /api/profile`
 
-The exact endpoint names may vary slightly by controller and service implementation, so refer to the backend code in `backend/src/main/java/org/belex/backend/controller` for the most current contract.
+## How it works
+
+The project is split into two main parts:
+
+- The backend exposes REST APIs, secures routes using Spring Security, authenticates users with JWT, and persists data in H2.
+- The frontend is a single-page React app that manages authentication, food logging, dashboard display, and dietary tracking.
+- The app fetches USDA nutrition metadata for food searches and calculates per-serving totals based on grams entered by the user.
 
 ## Development notes
 
-- The backend uses JWT authentication and protects most routes behind Spring Security.
-- The frontend stores the token in browser storage and sends it on authenticated requests.
-- The app is designed primarily for local development and demo use rather than production deployment.
+- The backend is designed mainly for local development and demo usage.
+- Most routes are protected behind authentication.
+- The frontend stores the token in browser storage and includes it in authenticated requests.
 
 ## Demo flow
 
-1. Start the backend.
-2. Start the frontend.
-3. Register a new account from the React app.
-4. Search for a food item like "banana" or "chicken breast".
-5. Select a food and add it to a meal for the day.
-6. View your daily totals and trend charts on the dashboard.
+1. Run the backend.
+2. Run the frontend.
+3. Create an account.
+4. Search for a food item such as "banana" or "chicken breast".
+5. Add it to a meal entry for the day.
+6. View your progress and trends on the dashboard.
 
 ## Future improvements
 
 Possible enhancements include:
 
-- Persistent user preferences and multi-user account management
-- Improved USDA API integration and caching
 - Better nutrition analytics and comparison views
-- Mobile-friendly layouts and accessibility improvements
-- Production-grade deployment config (Docker, CI/CD, environment separation)
+- Improved USDA API caching and error handling
+- More robust deployment configuration
+- Docker support for easier setup
+- Better mobile and accessibility improvements
 
 ## License
 
-This project does not currently include a formal license file. If you plan to share or distribute it publicly, add an appropriate open-source license before release.
+This repository does not currently include a formal license file. If you plan to share or distribute it publicly, add an appropriate open-source license before release.
