@@ -16,9 +16,9 @@ public class JwtService {
     private final long expiration;
 
     public JwtService(
-            @Value("${app.jwt-secret")
+            @Value("${app.jwt-secret}")
             String secret,
-            @Value("${app.jwt-expiration-ms")
+            @Value("${app.jwt-expiration-ms}")
             long expiration )
     {
         if (secret.getBytes(StandardCharsets.UTF_8).length < 32) {
