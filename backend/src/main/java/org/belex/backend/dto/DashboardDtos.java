@@ -18,8 +18,8 @@ public final class DashboardDtos {
             LocalDate date,
             BigDecimal calories,
             BigDecimal proteins,
-            BigDecimal fats,
-            BigDecimal carbs
+            BigDecimal carbs,
+            BigDecimal fats
     ){}
 
     public record DashboardResponse(
