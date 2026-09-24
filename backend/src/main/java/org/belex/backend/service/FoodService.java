@@ -46,7 +46,7 @@ public class FoodService {
             double fats = nutrient(food, 1004);
 
             if (kcal >= 0) {
-                result.add(new FoodDtos.FoodSearchItem(food.fcdId(), Objects.requireNonNullElse(food.description(), "Unnamed food"),
+                result.add(new FoodDtos.FoodSearchItem(food.fdcId(), Objects.requireNonNullElse(food.description(), "Unnamed food"),
                         Objects.requireNonNullElse(food.brandOwner(), "USDA"),
                         Objects.requireNonNullElse(food.dataType(), ""),
                         kcal, proteins, carbs, fats));

@@ -309,9 +309,9 @@ function LogFood({ onSaved }) {
     const factor = Number(grams || 0) / 100
     return {
       calories: selected.caloriesPer100g * factor,
-      protein: selected.proteinPer100g * factor,
+      protein: selected.proteinsPer100g * factor,
       carbs: selected.carbsPer100g * factor,
-      fat: selected.fatPer100g * factor,
+      fat: selected.fatsPer100g * factor,
     }
   }, [selected, grams])
 

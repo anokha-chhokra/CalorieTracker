@@ -43,7 +43,7 @@ export const api = {
   register: (data) => request('/auth/register', { method: 'POST', body: JSON.stringify(data) }),
   me: () => request('/auth/me'),
   dashboard: () => request('/dashboard'),
-  searchFoods: (q) => request(`/foods/search?q=${encodeURIComponent(q)}`),
+  searchFoods: (q) => request(`/foods/search?query=${encodeURIComponent(q)}`),
   getEntries: (date) => request(`/entries?date=${date}`),
   addEntry: (data) => request('/entries', { method: 'POST', body: JSON.stringify(data) }),
   deleteEntry: (id) => request(`/entries/${id}`, { method: 'DELETE' }),

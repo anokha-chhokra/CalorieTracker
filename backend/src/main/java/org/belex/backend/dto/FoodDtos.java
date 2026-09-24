@@ -13,7 +13,7 @@ public final class FoodDtos {
     ){}
 
     public record FoodResult(
-            long fcdId,
+            long fdcId,
             String description,
             String dataType,
             String brandOwner,
