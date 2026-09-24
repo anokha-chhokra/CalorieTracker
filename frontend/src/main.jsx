@@ -202,7 +202,7 @@ function Dashboard({ user, onNavigate }) {
   const remaining = Math.max(goal - eaten, 0)
   const progress = Math.min((eaten / goal) * 100, 100)
 
-  const macroTotal = Number(today.protein || 0) + Number(today.carbs || 0) + Number(today.fat || 0)
+  const macroTotal = Number(today.proteins || 0) + Number(today.carbs || 0) + Number(today.fats || 0)
   const macroPct = (n) => macroTotal ? Math.round((Number(n || 0) / macroTotal) * 100) : 0
 
   return (
@@ -227,9 +227,9 @@ function Dashboard({ user, onNavigate }) {
         <div className="card stat-card">
           <div className="card-head"><div><div className="eyebrow">MACROS</div><h3>Today’s balance</h3></div><span className="mini-icon">⚡</span></div>
           <div className="macro-grid">
-            <Macro label="Protein" value={today.protein} unit="g" percent={macroPct(today.protein)} tone="protein" />
+            <Macro label="Protein" value={today.proteins} unit="g" percent={macroPct(today.proteins)} tone="protein" />
             <Macro label="Carbs" value={today.carbs} unit="g" percent={macroPct(today.carbs)} tone="carbs" />
-            <Macro label="Fat" value={today.fat} unit="g" percent={macroPct(today.fat)} tone="fat" />
+            <Macro label="Fat" value={today.fats} unit="g" percent={macroPct(today.fats)} tone="fat" />
           </div>
         </div>
       </section>
@@ -322,10 +322,13 @@ function LogFood({ onSaved }) {
       await api.addEntry({
         foodName: selected.name,
         fdcId: selected.fdcId,
-        consumedOn: dateKey(),
+        date: dateKey(),
         mealType: meal,
-        servingGrams: Number(grams),
-        ...serving,
+        serving: Number(grams),
+        calories: serving.calories,
+        proteins: serving.protein,
+        carbs: serving.carbs,
+        fats: serving.fat,
       })
       onSaved(`${selected.name} added to ${MEALS.find(m => m.key === meal)?.label}.`)
       setSelected(null); setFoods([]); setQuery(''); setGrams(100)
@@ -390,7 +393,7 @@ function History() {
       <div className="history-table">
         {dashboard.month.slice().reverse().map(day => (
           <div className="history-row" key={day.date}>
-            <div><strong>{labelDate(day.date, true)}</strong><span>{day.protein.toFixed(1)}g protein · {day.carbs.toFixed(1)}g carbs · {day.fat.toFixed(1)}g fat</span></div>
+            <div><strong>{labelDate(day.date, true)}</strong><span>{day.proteins.toFixed(1)}g protein · {day.carbs.toFixed(1)}g carbs · {day.fats.toFixed(1)}g fat</span></div>
             <div className="history-bar"><span style={{ width: `${Math.min(day.calories / dashboard.dailyGoal * 100, 100)}%` }} /></div>
             <strong>{fmt(day.calories)} kcal</strong>
           </div>
